@@ -13,10 +13,11 @@ CLASS_NAMES = {
     0: 'int',
     1: 'float',
     2: 'boolean',
-    3: 'date',
-    4: 'datetime',
-    5: 'uuid',
-    6: 'string'
+    3: 'time',
+    4: 'date',
+    5: 'datetime',
+    6: 'uuid',
+    7: 'string'
 }
 
 VOCAB_SIZE: int = 128
@@ -24,7 +25,8 @@ MAX_LENGTH: int = 100
 
 
 def preprocess_string(input_str: str) -> np.ndarray:
-    encoded = [ord(c) % VOCAB_SIZE for c in input_str[:MAX_LENGTH].upper()]
+    input_str = input_str.strip().upper()
+    encoded = [ord(c) % VOCAB_SIZE for c in input_str[:MAX_LENGTH]]
     if len(encoded) < MAX_LENGTH:
         encoded.extend([0] * (MAX_LENGTH - len(encoded)))
     return np.array(encoded)
@@ -66,7 +68,7 @@ async def predict(predict_request: PredictRequest):
 
 @app.get('/classes')
 async def classes():
-    return CLASS_NAMES
+    return CLASS_NAMES.values()
 
 @app.get('/version')
 async def version():
