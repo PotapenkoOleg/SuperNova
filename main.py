@@ -64,6 +64,9 @@ async def predict(predict_request: PredictRequest):
         'probability': probability
     }
 
+@app.get('/classes')
+async def classes():
+    return CLASS_NAMES
 
 @app.get('/version')
 async def version():
