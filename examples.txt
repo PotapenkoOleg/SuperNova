@@ -1,0 +1,32 @@
+String: '42'
+Predicted type: int
+Confidence: 100.00%
+--------------------------------------------------
+String: '3.14159'
+Predicted type: float
+Confidence: 100.00%
+--------------------------------------------------
+String: 'true'
+Predicted type: boolean
+Confidence: 100.00%
+--------------------------------------------------
+String: '2024-01-15'
+Predicted type: date
+Confidence: 100.00%
+--------------------------------------------------
+String: '2024-01-15 14:30:00'
+Predicted type: datetime
+Confidence: 83.91%
+--------------------------------------------------
+String: 'user@example.com'
+Predicted type: string
+Confidence: 99.95%
+--------------------------------------------------
+String: '493729a5-88ef-43da-aa20-00daee032f77'
+Predicted type: uuid
+Confidence: 100.00%
+--------------------------------------------------
+String: 'Hello, World!'
+Predicted type: string
+Confidence: 100.00%
+--------------------------------------------------
