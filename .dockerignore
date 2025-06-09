@@ -3,6 +3,10 @@
 docker-compose.yml
 Dockerfile
 requirements.txt
+examples.txt
+bulk_predict.py
 __pycache__
+assets
 .git
 .venv
+.idea

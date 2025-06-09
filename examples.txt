@@ -1,53 +1,94 @@
-String: '42'
-Predicted type: int
-Confidence: 100.00%
---------------------------------------------------
-String: '3.14159'
-Predicted type: float
-Confidence: 100.00%
---------------------------------------------------
-String: 'true'
-Predicted type: boolean
-Confidence: 100.00%
---------------------------------------------------
-String: '2024-01-15'
-Predicted type: date
-Confidence: 100.00%
---------------------------------------------------
-String: '2024-01-15 14:30:00'
-Predicted type: datetime
-Confidence: 83.91%
---------------------------------------------------
-String: 'user@example.com'
-Predicted type: string
-Confidence: 99.95%
---------------------------------------------------
-String: '493729a5-88ef-43da-aa20-00daee032f77'
-Predicted type: uuid
-Confidence: 100.00%
---------------------------------------------------
-String: 'Hello, World!'
-Predicted type: string
-Confidence: 100.00%
---------------------------------------------------
-0 = -6326958171494
-0 = 1783232
-0 = -854006862971075693
-1 = -371031.8302
-1 = 143366.900
-1 = 481908.79208
-2 = FALSE
-2 = true
-2 = 1
-3 = 02:51:08
-3 = 7:24:58 AM
-3 = 20:51:33
-4 = 19840613
-4 = 2004-07-12
-4 = 14.02.2028
-5 = 2011-04-17T06:00:57Z
-5 = 1984-07-02T09:31:13-12:00
-5 = Tue, 10 Apr 1990 18:30:09 GMT
-6 = 29cd41c6-96c0-4098-a7b1-1ec4c2ad00e2
-6 = d1c4a095-528c-4a46-a0fb-bd315a51b2e7
-6 = a06c962e-d35b-48f9-84b5-a41394a5a5e3
+0=59800636137394
+0=-914470
+0=-8577095
+0=-324
+0=337794524
+0=25229568671147
+0=-891566605569111
+0=7773756146919024
+0=59856363247406
+0=-5476299006
+1=26084.134324
+1=-40826.693
+1=3855.15878
+1=85661.180
+1=69297.5
+1=-69130.7
+1=22847.613
+1=-92911.852
+1=-75122.64315
+1=88564.8990
+2=FALSE
+2=FALSE
+2=TRUE
+2=FALSE
+2=TRUE
+2=TRUE
+2=TRUE
+2=TRUE
+2=TRUE
+2=FALSE
+3=04:45:25
+3=19:57
+3=20:33:07
+3=23:06
+3=03:26 AM
+3=11:27:57 AM
+3=8:23:48 PM
+3=9:21:18 PM
+3=09:43
+3=6:47:54 AM
+4=September 14, 1982
+4=2017-04-06
+4=Aug 23, 2011
+4=October 18, 2013
+4=20191012
+4=1993-12-03
+4=November 15, 1990
+4=03.04.2012
+4=01/13/1991
+4=Jul 4, 1996
+5=Thu, 10 Jan 1990 20:28:10 GMT
+5=10/26/1998 6:23 AM
+5=2010-12-10T09:48:50Z
+5=19-08-2028 16:17
+5=2019-08-11T06:20:11.326Z
+5=2015-04-13T11:50:09Z
+5=1993-04-20T00:20:59Z
+5=2009-07-27T11:48
+5=2015-01-06T00:41:25
+5=1995/06/05 06:18
+6=4f2574c4-560e-41e8-9ec9-18d56dfdf368
+6=466cad12-8ef4-4d90-90f8-a256ef7b5885
+6=8684f69d-3b7c-4814-bb0f-ab06df01394b
+6=2aa9d409-256d-44e0-9e9b-a5ca15ab4df5
+6=0250c0a6-3003-4a2f-a031-1579a71bfc4e
+6=c41ee619-fb13-440f-a01b-297e77dff8fe
+6=6d9ef6b3-8bad-4052-b0f2-adbca6d657de
+6=ae9829f9-5c7a-4863-9de1-bd4ac2e7f01a
+6=018b7e60-8810-4d80-a34b-d7cc0fb8fb5c
+6=d9ba7e4c-bb2b-4228-90db-f5fb954c4894
+7=Absolute Advantage
+7=Accounting Equation
+7=Accounting Rate of Return (ARR)
+7=Acid-Test Ratio
+7=Acquisition
+7=Adverse Selection
+7=After-Hours Trading
+7=Alpha: Its Meaning in Investing, With Examples
+7=Amalgamation
+7=American Depositary Receipt (ADR)
+7=American Dream
+7=Analysis of Variance (ANOVA)
+7=Angel Investor: Definition and How It Works
+7=Annual Percentage Rate (APR)
+7=Annuity
+7=Applicable Federal Rate (AFR)
+7=Artificial Intelligence (AI)
+7=Asset
+7=Asset Management
+7=What Is the Asset Turnover Ratio? Calculation and Examples
+7=Assets Under Management (AUM)
+7=Automated Clearing House (ACH)
+7=Automated Teller Machine (ATM)
+7=Average True Range (ATR)
