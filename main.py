@@ -7,6 +7,10 @@ import tensorflow as tf
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+TITLE = "Supernova"
+DESCRIPTION = "Neural Network for predicting data types from raw strings eg csv, json etc"
+VERSION = "1.0.0"
+
 ml_models = {}
 
 CLASS_NAMES = {
@@ -25,7 +29,7 @@ MAX_LENGTH: int = 100
 
 
 def preprocess_string(input_str: str) -> np.ndarray:
-    input_str = input_str[:MAX_LENGTH-1].strip().upper()
+    input_str = input_str[:MAX_LENGTH - 1].strip().upper()
     encoded = [ord(c) % VOCAB_SIZE for c in input_str]
     if len(encoded) < MAX_LENGTH:
         encoded.extend([0] * (MAX_LENGTH - len(encoded)))
@@ -43,7 +47,12 @@ async def lifespan(app: FastAPI):
     ml_models.clear()
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    title=TITLE,
+    description=DESCRIPTION,
+    version=VERSION,
+    lifespan=lifespan
+)
 
 
 class PredictRequest(BaseModel):
@@ -66,10 +75,12 @@ async def predict(predict_request: PredictRequest):
         'probability': probability
     }
 
+
 @app.get('/classes')
 async def classes():
     return list(CLASS_NAMES.values())
 
+
 @app.get('/version')
 async def version():
-    return {'Product Name': 'Supernova', 'Version': '1.0.0'}
+    return {'Product Name': TITLE, 'Version': VERSION}
