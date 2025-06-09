@@ -25,8 +25,8 @@ MAX_LENGTH: int = 100
 
 
 def preprocess_string(input_str: str) -> np.ndarray:
-    input_str = input_str.strip().upper()
-    encoded = [ord(c) % VOCAB_SIZE for c in input_str[:MAX_LENGTH]]
+    input_str = input_str[:MAX_LENGTH-1].strip().upper()
+    encoded = [ord(c) % VOCAB_SIZE for c in input_str]
     if len(encoded) < MAX_LENGTH:
         encoded.extend([0] * (MAX_LENGTH - len(encoded)))
     return np.array(encoded)
@@ -68,7 +68,7 @@ async def predict(predict_request: PredictRequest):
 
 @app.get('/classes')
 async def classes():
-    return CLASS_NAMES.values()
+    return list(CLASS_NAMES.values())
 
 @app.get('/version')
 async def version():
