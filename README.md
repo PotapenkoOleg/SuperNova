@@ -36,6 +36,9 @@ Support load balancer heart beat
 ### POST ('/predict')
 Predict data type from raw string
 
+### POST ('bulk_predict')
+Bulk predict data type from list of raw strings. Each entry gets its own prediction
+
 ### POST ('/vote_predict')
 Gets class from the list of samples
 "soft_vote" parameter used to get a simple majority vote or probability-based vote
