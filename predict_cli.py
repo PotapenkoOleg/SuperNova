@@ -47,6 +47,37 @@ def vote_predict(base_url: str, input_strings: list[str], soft_vote: bool) -> di
     return post(base_url, "/vote_predict/", {"input_strs": input_strings, "soft_vote": soft_vote})
 
 
+def positive_int(value: str) -> int:
+    number = int(value)
+    if number < 1:
+        raise argparse.ArgumentTypeError("batch size must be >= 1")
+    return number
+
+
+def chunked(items: list, size: int | None) -> list[list]:
+    if not size or size >= len(items):
+        return [items]
+    return [items[index:index + size] for index in range(0, len(items), size)]
+
+
+def merge_votes(results: list[dict], soft_vote: bool) -> dict:
+    class_names = list(results[0]['votes'])
+    votes = {name: sum(r['votes'][name] for r in results) for name in class_names}
+    prob_sums = {name: sum(r['probability-sums'][name] for r in results) for name in class_names}
+    # Whichever criterion is primary decides the winner; the other one breaks ties
+    primary, secondary = (prob_sums, votes) if soft_vote else (votes, prob_sums)
+    tied = [name for name in class_names if primary[name] == max(primary.values())]
+    winner = max(tied, key=lambda name: (secondary[name], -class_names.index(name)))
+    return {
+        'predicted-class': winner,
+        'soft-vote': soft_vote,
+        'sample-count': sum(r['sample-count'] for r in results),
+        'votes': votes,
+        'probability-sums': prob_sums,
+        'tie-break-used': len(tied) > 1
+    }
+
+
 def read_input_strings(filename: str) -> list[str]:
     try:
         with open(filename, 'r') as file:
@@ -111,6 +142,8 @@ if __name__ == "__main__":
                         help="list the model's classes and exit")
     parser.add_argument('-v', '--version', action='store_true',
                         help="show the API product name and version and exit")
+    parser.add_argument('-n', '--batch-size', type=positive_int,
+                        help="send records in batches of this size (default: one request)")
     parser.add_argument('-o', '--output-file',
                         help="save bulk predict results to this CSV file")
     parser.add_argument('-f', '--input-file', default=DEFAULT_INPUT_FILE,
@@ -128,9 +161,13 @@ if __name__ == "__main__":
         else:
             input_strings = read_input_strings(args.input_file)
 
+            batches = chunked(input_strings, args.batch_size)
+
             if args.mode == 'bulk':
                 print("== /bulk_predict/ ==")
-                results = bulk_predict(args.base_url, input_strings)
+                results = []
+                for batch in batches:
+                    results.extend(bulk_predict(args.base_url, batch))
                 print_predictions(results)
                 if args.output_file:
                     write_predictions_csv(results, args.output_file)
@@ -140,6 +177,9 @@ if __name__ == "__main__":
                 if args.output_file:
                     print("Note: --output-file applies to bulk mode only")
                 print("== /vote_predict/ ==")
-                print_vote(vote_predict(args.base_url, input_strings, args.soft))
+                if len(batches) > 1:
+                    print(f"Batches         : {len(batches)}")
+                print_vote(merge_votes([vote_predict(args.base_url, batch, args.soft)
+                                        for batch in batches], args.soft))
     except Exception as e:
         print(f"Error: {str(e)}")
