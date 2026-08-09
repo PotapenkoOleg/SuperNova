@@ -4,10 +4,11 @@ EXPOSE 80
 
 WORKDIR /app
 
-COPY ./requirements.docker.txt /app/requirements.docker.txt
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-RUN pip install --no-cache-dir --upgrade -r /app/requirements.docker.txt
+COPY pyproject.toml uv.lock .python-version /app/
+RUN uv sync --frozen
 
 COPY ./ /app
 
-CMD ["fastapi", "run", "/app/main.py", "--port", "80"]
+CMD ["/app/.venv/bin/fastapi", "run", "/app/main.py", "--port", "80"]
