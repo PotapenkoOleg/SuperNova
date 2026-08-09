@@ -4,7 +4,7 @@ from copy import copy
 
 import numpy as np
 import tensorflow as tf
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from pydantic import BaseModel
 
 TITLE = "Supernova"
@@ -58,6 +58,9 @@ app = FastAPI(
 class PredictRequest(BaseModel):
     input_str: str
 
+@app.get('/')
+async def root():
+    return Response(status_code=200) # makes load balancer happy
 
 @app.post('/predict/')
 async def predict(predict_request: PredictRequest):
@@ -74,7 +77,6 @@ async def predict(predict_request: PredictRequest):
         'predicted-class': predicted_class,
         'probability': probability
     }
-
 
 @app.get('/classes')
 async def classes():
