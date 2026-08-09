@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:latest
+FROM tensorflow/tensorflow:2.19.0-gpu
 
 EXPOSE 80
 
