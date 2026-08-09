@@ -1,7 +1,7 @@
 import requests
 from tabulate import tabulate
 
-API_ENDPOINT = "http://localhost:8090/predict/"
+API_ENDPOINT = "http://localhost:80/predict/"
 
 CLASS_NAMES = {
     0: 'int',
