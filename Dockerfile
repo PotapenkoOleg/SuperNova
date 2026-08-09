@@ -1,10 +1,12 @@
-FROM tensorflow/tensorflow:2.19.0
+FROM --platform=linux/amd64 ghcr.io/astral-sh/uv:latest AS uv
+
+FROM --platform=linux/amd64 tensorflow/tensorflow:2.19.0
 
 EXPOSE 80
 
 WORKDIR /app
 
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+COPY --from=uv /uv /uvx /bin/
 
 COPY pyproject.toml uv.lock .python-version /app/
 RUN uv sync --frozen
