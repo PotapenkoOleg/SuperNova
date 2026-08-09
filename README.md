@@ -36,12 +36,11 @@ Support load balancer heart beat
 ### POST ('/predict')
 Predict data type from raw string
 
-### POST ('bulk_predict')
+### POST ('/bulk_predict')
 Bulk predict data type from list of raw strings. Each entry gets its own prediction
 
 ### POST ('/vote_predict')
-Gets class from the list of samples
-"soft_vote" parameter used to get a simple majority vote or probability-based vote
+Gets class from the list of samples. Parameter "soft_vote" used to get a simple majority vote or probability-based vote
 
 - "soft_vote": false – Returns class with most samples. If ties return class with the highest sum of probabilities 
 
