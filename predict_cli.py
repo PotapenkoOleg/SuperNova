@@ -22,6 +22,23 @@ def post(base_url: str, path: str, payload: dict) -> dict | list:
         raise Exception(f"API request failed: {str(e)}")
 
 
+def get(base_url: str, path: str) -> dict | list:
+    try:
+        response = requests.get(f"{base_url}{path}", headers=HEADERS)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        raise Exception(f"API request failed: {str(e)}")
+
+
+def classes(base_url: str) -> list[str]:
+    return get(base_url, "/classes")
+
+
+def version(base_url: str) -> dict:
+    return get(base_url, "/version")
+
+
 def bulk_predict(base_url: str, input_strings: list[str]) -> list[dict]:
     return post(base_url, "/bulk_predict/", {"input_strs": input_strings})
 
@@ -45,6 +62,18 @@ def print_predictions(results: list[dict]) -> None:
     for result in results:
         results_table.append((result['input-str'], result['predicted-class'], result['probability']))
     print(tabulate(results_table, headers="firstrow", tablefmt="simple_grid"))
+
+
+def print_classes(class_names: list[str]) -> None:
+    results_table = [("Index", "Class")]
+    for index, class_name in enumerate(class_names):
+        results_table.append((index, class_name))
+    print(tabulate(results_table, headers="firstrow", tablefmt="simple_grid"))
+
+
+def print_version(result: dict) -> None:
+    for key, value in result.items():
+        print(f"{key} : {value}")
 
 
 def write_predictions_csv(results: list[dict], filename: str) -> None:
@@ -78,6 +107,10 @@ if __name__ == "__main__":
                         help="use soft voting in vote mode")
     parser.add_argument('-u', '--base-url', default=DEFAULT_BASE_URL,
                         help=f"API base URL (default: {DEFAULT_BASE_URL})")
+    parser.add_argument('-c', '--classes', action='store_true',
+                        help="list the model's classes and exit")
+    parser.add_argument('-v', '--version', action='store_true',
+                        help="show the API product name and version and exit")
     parser.add_argument('-o', '--output-file',
                         help="save bulk predict results to this CSV file")
     parser.add_argument('-f', '--input-file', default=DEFAULT_INPUT_FILE,
@@ -85,20 +118,28 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     try:
-        input_strings = read_input_strings(args.input_file)
+        if args.classes or args.version:
+            if args.classes:
+                print("== /classes ==")
+                print_classes(classes(args.base_url))
+            if args.version:
+                print("== /version ==")
+                print_version(version(args.base_url))
+        else:
+            input_strings = read_input_strings(args.input_file)
 
-        if args.mode == 'bulk':
-            print("== /bulk_predict/ ==")
-            results = bulk_predict(args.base_url, input_strings)
-            print_predictions(results)
-            if args.output_file:
-                write_predictions_csv(results, args.output_file)
-                print(f"Saved {len(results)} rows to {args.output_file}")
+            if args.mode == 'bulk':
+                print("== /bulk_predict/ ==")
+                results = bulk_predict(args.base_url, input_strings)
+                print_predictions(results)
+                if args.output_file:
+                    write_predictions_csv(results, args.output_file)
+                    print(f"Saved {len(results)} rows to {args.output_file}")
 
-        if args.mode == 'vote':
-            if args.output_file:
-                print("Note: --output-file applies to bulk mode only")
-            print("== /vote_predict/ ==")
-            print_vote(vote_predict(args.base_url, input_strings, args.soft))
+            if args.mode == 'vote':
+                if args.output_file:
+                    print("Note: --output-file applies to bulk mode only")
+                print("== /vote_predict/ ==")
+                print_vote(vote_predict(args.base_url, input_strings, args.soft))
     except Exception as e:
         print(f"Error: {str(e)}")
