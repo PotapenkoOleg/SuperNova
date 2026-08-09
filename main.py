@@ -59,7 +59,7 @@ class PredictRequest(BaseModel):
     input_str: str
 
 
-class BulkPredictRequest(BaseModel):
+class VotePredictRequest(BaseModel):
     input_strs: list[str] = Field(..., min_length=1)
     soft_vote: bool = False
 
@@ -83,10 +83,10 @@ async def predict(predict_request: PredictRequest):
         'probability': probability
     }
 
-@app.post('/bulk_predict/')
-async def bulk_predict(bulk_predict_request: BulkPredictRequest):
-    input_strs = bulk_predict_request.input_strs
-    soft_vote = bulk_predict_request.soft_vote
+@app.post('/vote_predict/')
+async def vote_predict(vote_predict_request: VotePredictRequest):
+    input_strs = vote_predict_request.input_strs
+    soft_vote = vote_predict_request.soft_vote
     x = np.stack([preprocess_string(input_str) for input_str in input_strs])
     model = ml_models['supernova']
     predictions = model.predict(x, verbose=0)
