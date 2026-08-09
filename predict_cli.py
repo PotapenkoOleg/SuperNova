@@ -84,7 +84,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     try:
-        examples = read_examples("examples.txt")
+        examples = read_examples("examples.csv")
         input_strings = [value for _, value in examples]
 
         if args.mode in ('predict', 'all'):
