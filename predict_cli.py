@@ -1,4 +1,5 @@
 import argparse
+import csv
 
 import requests
 from tabulate import tabulate
@@ -46,6 +47,17 @@ def print_predictions(results: list[dict]) -> None:
     print(tabulate(results_table, headers="firstrow", tablefmt="simple_grid"))
 
 
+def write_predictions_csv(results: list[dict], filename: str) -> None:
+    try:
+        with open(filename, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(("Input", "Predicted Class", "Probability"))
+            for result in results:
+                writer.writerow((result['input-str'], result['predicted-class'], result['probability']))
+    except Exception as e:
+        raise Exception(f"Error writing file {filename}: {str(e)}")
+
+
 def print_vote(result: dict) -> None:
     print(f"Predicted class : {result['predicted-class']}")
     print(f"Soft vote       : {result['soft-vote']}")
@@ -66,6 +78,8 @@ if __name__ == "__main__":
                         help="use soft voting in vote mode")
     parser.add_argument('-u', '--base-url', default=DEFAULT_BASE_URL,
                         help=f"API base URL (default: {DEFAULT_BASE_URL})")
+    parser.add_argument('-o', '--output-file',
+                        help="save bulk predict results to this CSV file")
     parser.add_argument('-f', '--input-file', default=DEFAULT_INPUT_FILE,
                         help=f"file of raw input strings, one per line (default: {DEFAULT_INPUT_FILE})")
     args = parser.parse_args()
@@ -75,9 +89,15 @@ if __name__ == "__main__":
 
         if args.mode == 'bulk':
             print("== /bulk_predict/ ==")
-            print_predictions(bulk_predict(args.base_url, input_strings))
+            results = bulk_predict(args.base_url, input_strings)
+            print_predictions(results)
+            if args.output_file:
+                write_predictions_csv(results, args.output_file)
+                print(f"Saved {len(results)} rows to {args.output_file}")
 
         if args.mode == 'vote':
+            if args.output_file:
+                print("Note: --output-file applies to bulk mode only")
             print("== /vote_predict/ ==")
             print_vote(vote_predict(args.base_url, input_strings, args.soft))
     except Exception as e:
