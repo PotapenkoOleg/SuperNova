@@ -63,6 +63,10 @@ class VotePredictRequest(BaseModel):
     input_strs: list[str] = Field(..., min_length=1)
     soft_vote: bool = False
 
+
+class BulkPredictRequest(BaseModel):
+    input_strs: list[str] = Field(..., min_length=1)
+
 @app.get('/')
 async def root():
     return Response(status_code=200) # makes load balancer happy
@@ -82,6 +86,23 @@ async def predict(predict_request: PredictRequest):
         'predicted-class': predicted_class,
         'probability': probability
     }
+
+@app.post('/bulk_predict/')
+async def bulk_predict(bulk_predict_request: BulkPredictRequest):
+    input_strs = bulk_predict_request.input_strs
+    x = np.stack([preprocess_string(input_str) for input_str in input_strs])
+    model = ml_models['supernova']
+    predictions = model.predict(x, verbose=0)
+    max_proba_indices = np.argmax(predictions, axis=1)
+    return [
+        {
+            'input-str': input_str,
+            'predicted-class': CLASS_NAMES[int(max_proba_index)],
+            'probability': float(prediction[max_proba_index])
+        }
+        for input_str, prediction, max_proba_index
+        in zip(input_strs, predictions, max_proba_indices)
+    ]
 
 @app.post('/vote_predict/')
 async def vote_predict(vote_predict_request: VotePredictRequest):

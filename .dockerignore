@@ -4,7 +4,7 @@ docker-compose.yml
 Dockerfile
 requirements.txt
 examples.txt
-bulk_predict.py
+predict_cli.py
 __pycache__
 assets
 .git
