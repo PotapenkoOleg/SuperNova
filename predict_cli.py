@@ -60,7 +60,7 @@ def print_vote(result: dict) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="SuperNova prediction CLI")
-    parser.add_argument('-m', '--mode', choices=['bulk', 'vote', 'all'],
+    parser.add_argument('-m', '--mode', choices=['bulk', 'vote'],
                         default='bulk', help="which endpoint to exercise (default: bulk)")
     parser.add_argument('-s', '--soft', action='store_true',
                         help="use soft voting in vote mode")
@@ -73,11 +73,11 @@ if __name__ == "__main__":
     try:
         input_strings = read_input_strings(args.input_file)
 
-        if args.mode in ('bulk', 'all'):
+        if args.mode == 'bulk':
             print("== /bulk_predict/ ==")
             print_predictions(bulk_predict(args.base_url, input_strings))
 
-        if args.mode in ('vote', 'all'):
+        if args.mode == 'vote':
             print("== /vote_predict/ ==")
             print_vote(vote_predict(args.base_url, input_strings, args.soft))
     except Exception as e:
