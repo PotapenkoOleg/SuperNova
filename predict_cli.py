@@ -64,29 +64,29 @@ def print_vote(result: dict) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="SuperNova prediction CLI")
-    parser.add_argument('--mode', choices=['predict', 'bulk_predict', 'vote_predict', 'all'],
+    parser.add_argument('-m', '--mode', choices=['predict', 'bulk', 'vote', 'all'],
                         default='predict', help="which endpoint to exercise (default: predict)")
-    parser.add_argument('--soft-vote', action='store_true',
-                        help="use soft voting in vote_predict mode")
-    parser.add_argument('--base-url', default=DEFAULT_BASE_URL,
+    parser.add_argument('-s', '--soft', action='store_true',
+                        help="use soft voting in vote mode")
+    parser.add_argument('-u', '--base-url', default=DEFAULT_BASE_URL,
                         help=f"API base URL (default: {DEFAULT_BASE_URL})")
-    parser.add_argument('--input-file-name', default=DEFAULT_INPUT_FILE,
+    parser.add_argument('-f', '--input-file', default=DEFAULT_INPUT_FILE,
                         help=f"file of raw input strings, one per line (default: {DEFAULT_INPUT_FILE})")
     args = parser.parse_args()
 
     try:
-        input_strings = read_input_strings(args.input_file_name)
+        input_strings = read_input_strings(args.input_file)
 
         if args.mode in ('predict', 'all'):
             print("== /predict/ ==")
             print_predictions([predict(args.base_url, value) for value in input_strings])
 
-        if args.mode in ('bulk_predict', 'all'):
+        if args.mode in ('bulk', 'all'):
             print("== /bulk_predict/ ==")
             print_predictions(bulk_predict(args.base_url, input_strings))
 
-        if args.mode in ('vote_predict', 'all'):
+        if args.mode in ('vote', 'all'):
             print("== /vote_predict/ ==")
-            print_vote(vote_predict(args.base_url, input_strings, args.soft_vote))
+            print_vote(vote_predict(args.base_url, input_strings, args.soft))
     except Exception as e:
         print(f"Error: {str(e)}")
