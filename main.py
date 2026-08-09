@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 
 TITLE = "Supernova"
 DESCRIPTION = "Neural Network for predicting data types from raw strings eg csv, json etc"
-VERSION = "1.0.0"
+VERSION = "2.0.0"
 
 ml_models = {}
 
