@@ -40,7 +40,7 @@ Predict data type from raw string
 Gets class from the list of samples
 "soft_vote" parameter used to get a simple majority vote or probability-based vote
 
-- "soft_vote": false – Returns class with most samples. If ties return class with the highest sum of probabilities. 
+- "soft_vote": false – Returns class with most samples. If ties return class with the highest sum of probabilities 
 
 - "soft_vote": true – Returns class with the highest sum of probabilities. If ties return class with most samples
 
