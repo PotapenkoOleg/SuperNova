@@ -21,10 +21,6 @@ def post(base_url: str, path: str, payload: dict) -> dict | list:
         raise Exception(f"API request failed: {str(e)}")
 
 
-def predict(base_url: str, input_string: str) -> dict:
-    return post(base_url, "/predict/", {"input_str": input_string})
-
-
 def bulk_predict(base_url: str, input_strings: list[str]) -> list[dict]:
     return post(base_url, "/bulk_predict/", {"input_strs": input_strings})
 
@@ -64,8 +60,8 @@ def print_vote(result: dict) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="SuperNova prediction CLI")
-    parser.add_argument('-m', '--mode', choices=['predict', 'bulk', 'vote', 'all'],
-                        default='predict', help="which endpoint to exercise (default: predict)")
+    parser.add_argument('-m', '--mode', choices=['bulk', 'vote', 'all'],
+                        default='bulk', help="which endpoint to exercise (default: bulk)")
     parser.add_argument('-s', '--soft', action='store_true',
                         help="use soft voting in vote mode")
     parser.add_argument('-u', '--base-url', default=DEFAULT_BASE_URL,
@@ -76,10 +72,6 @@ if __name__ == "__main__":
 
     try:
         input_strings = read_input_strings(args.input_file)
-
-        if args.mode in ('predict', 'all'):
-            print("== /predict/ ==")
-            print_predictions([predict(args.base_url, value) for value in input_strings])
 
         if args.mode in ('bulk', 'all'):
             print("== /bulk_predict/ ==")
